@@ -23,3 +23,6 @@ protocols:
     fast:
         description: 'Protocol to perform a relaxation at low precision at minimal computational cost for testing purposes.'
         volume_convergence: 0.05
+    oxides_validation:
+        description: 'Protocol to perform a relaxation at high precision at higher computational cost.'
+        volume_convergence: 0.01

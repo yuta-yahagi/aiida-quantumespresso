@@ -5,10 +5,13 @@ default_inputs:
 default_protocol: moderate
 protocols:
     moderate:
-        description: 'Protocol to perform a band structure calculation at normal precision at moderate computational cost.'
+        description: "Protocol to perform a band structure calculation at normal precision at moderate computational cost."
     precise:
-        description: 'Protocol to perform a band structure calculation at high precision at higher computational cost.'
+        description: "Protocol to perform a band structure calculation at high precision at higher computational cost."
         bands_kpoints_distance: 0.015
     fast:
-        description: 'Protocol to perform a band structure calculation at low precision at minimal computational cost for testing purposes.'
+        description: "Protocol to perform a band structure calculation at low precision at minimal computational cost for testing purposes."
         bands_kpoints_distance: 0.1
+    oxides_validation:
+        description: "Protocol to perform a band structure calculation at high precision at higher computational cost."
+        bands_kpoints_distance: 0.015

@@ -81,6 +81,9 @@ aiida-quantumespresso = 'aiida_quantumespresso.cli:cmd_root'
 'quantumespresso.seekpath_structure_analysis' = 'aiida_quantumespresso.calculations.functions.seekpath_structure_analysis:seekpath_structure_analysis'
 'quantumespresso.xspectra' = 'aiida_quantumespresso.calculations.xspectra:XspectraCalculation'
 
+[project.entry-points.'aiida.calculations.importers']
+'quantumespresso.pw' = 'aiida_quantumespresso.calculations.importers.pw:PwCalculationImmigrator'
+
 [project.entry-points.'aiida.data']
 'quantumespresso.force_constants' = 'aiida_quantumespresso.data.force_constants:ForceConstantsData'
 
@@ -163,6 +166,7 @@ disable = [
     'inconsistent-return-statements',
     'import-outside-toplevel',
     'no-else-raise',
+    'too-few-public-methods',
     'too-many-arguments',
     'too-many-ancestors',
     'too-many-branches',

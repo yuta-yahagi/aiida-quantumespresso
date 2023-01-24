@@ -4,6 +4,7 @@ import traceback
 
 from aiida import orm
 from aiida.common import exceptions
+from aiida.engine import ExitCode
 import numpy
 
 from aiida_quantumespresso.utils.mapping import get_logging_container
@@ -106,16 +107,25 @@ class PwParser(Parser):
         if exit_code:
             return self.exit(exit_code)
 
-        # If the both stdout and xml exit codes are set, there was a basic problem with both output files and there
-        # is no need to investigate any further.
-        if self.exit_code_stdout and self.exit_code_xml:
-            return self.exit(self.exit_codes.ERROR_OUTPUT_FILES)
+        # If either the stdout or XML were incomplete or corrupt investigate the potential cause
+        if self.exit_code_stdout or self.exit_code_xml:
 
-        if self.exit_code_stdout:
-            return self.exit(self.exit_code_stdout)
+            # First check whether the scheduler already reported an exit code.
+            if self.node.exit_status is not None:
 
-        if self.exit_code_xml:
-            return self.exit(self.exit_code_xml)
+                # Now it is unlikely we can provide a more specific exit code so we keep the scheduler one.
+                return ExitCode(self.node.exit_status, self.node.exit_message)
+
+            # If the both stdout and xml exit codes are set, there was a basic problem with both output files and there
+            # is no need to investigate any further.
+            if self.exit_code_stdout and self.exit_code_xml:
+                return self.exit(self.exit_codes.ERROR_OUTPUT_FILES)
+
+            if self.exit_code_stdout:
+                return self.exit(self.exit_code_stdout)
+
+            if self.exit_code_xml:
+                return self.exit(self.exit_code_xml)
 
         # First determine issues that can occurr for all calculation types. Note that the generic errors, that are
         # common to all types are done first. If a problem is found there, we return the exit code and don't continue

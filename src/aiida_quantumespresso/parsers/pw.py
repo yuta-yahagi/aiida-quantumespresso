@@ -103,11 +103,6 @@ class PwParser(Parser):
         ignore = ['Error while parsing ethr.', 'DEPRECATED: symmetry with ibrav=0, use correct ibrav instead']
         self.emit_logs([logs_stdout, logs_xml], ignore=ignore)
 
-        # First check for specific known problems that can cause a pre-mature termination of the calculation
-        exit_code = self.validate_premature_exit(logs_stdout)
-        if exit_code:
-            return self.exit(exit_code)
-
         # If either the stdout or XML were incomplete or corrupt investigate the potential cause
         if self.exit_code_stdout or self.exit_code_xml:
 
@@ -126,6 +121,11 @@ class PwParser(Parser):
 
                 # Now it is unlikely we can provide a more specific exit code so we keep the scheduler one.
                 return ExitCode(self.node.exit_status, self.node.exit_message)
+
+            # Check for specific known problems that can cause a pre-mature termination of the calculation
+            exit_code = self.validate_premature_exit(logs_stdout)
+            if exit_code:
+                return self.exit(exit_code)
 
             # If the both stdout and xml exit codes are set, there was a basic problem with both output files and there
             # is no need to investigate any further.

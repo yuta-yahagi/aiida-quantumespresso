@@ -127,6 +127,11 @@ class PwParser(Parser):
             if exit_code:
                 return self.exit(exit_code)
 
+            # At this point we have no specific known error modes. If the scheduler parser set an exit code, we do not
+            # override it by simply returning it.
+            if self.node.exit_status is not None:
+                return ExitCode(self.node.exit_status, self.node.exit_message)
+
             # If the both stdout and xml exit codes are set, there was a basic problem with both output files and there
             # is no need to investigate any further.
             if self.exit_code_stdout and self.exit_code_xml:
